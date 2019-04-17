@@ -17,17 +17,20 @@ def move_units(directories_dict, document_number, place):
             move_document = directories_dict[i].pop(directories_dict[i].index(document_number))
             directories_dict.setdefault(place, [])
             directories_dict[place].append(move_document)
-    return directories_dict
+            return directories_dict
+    print('Документ c номером {} не найден'.format(document_number))
 
 
 def del_units(documents_list, directories_dict, document_number):
-    for i in range(len(documents_list)):
-        if document_number == documents_list[i]['number']:
+    documents_list_copy = documents_list.copy()
+    for i in range(len(documents_list_copy)):
+        if document_number in documents_list_copy[i]['number']:
             documents_list.pop(i)
-    for i in directories_dict:
-        if document_number in directories_dict[i]:
-            directories_dict[i].pop(directories_dict[i].index(document_number))
-    return directories_dict, documents_list
+    for k in directories_dict:
+        if document_number in directories_dict[k]:
+            directories_dict[k].pop(directories_dict[k].index(document_number))
+            return directories_dict, documents_list
+    print('Документ c номером {} не найден'.format(document_number))
 
 
 def find_people(data, document_number):
@@ -65,12 +68,12 @@ def add_unit(documents_list, directories_dict):
 def main():
     while True:
         user_input = input(
-            '\nВведите команду:\np - что бы найти человека по номеру документа\n'
-            'l - что бы вывести весь список\n'
-            's - что бы найти место хранения по номеру документа\n'
-            'a - что бы добавить новый документ\n'
-            'd - что бы удалить документ из списка и из перечня полок\n'
-            'm - что бы переместить документ на другую полку')
+            '\nВведите команду:\np - чтобы найти человека по номеру документа\n'
+            'l - чтобы вывести весь список\n'
+            's - чтобы найти место хранения по номеру документа\n'
+            'a - чтобы добавить новый документ\n'
+            'd - чтобы удалить документ из списка и из перечня полок\n'
+            'm - чтобы переместить документ на другую полку')
         if user_input.lower() == 'p':
             doc_number_input = input('Введите номер документа: ')
             print('Документ с номером {} принадлежит: {}'.format(doc_number_input,
