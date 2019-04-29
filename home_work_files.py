@@ -10,7 +10,7 @@ def composition_dict(list):
 
 
 def main():
-    with open('r.txt', encoding='utf8') as f:
+    with open('recipes.txt', encoding='utf8') as f:
         cook_book = {}
         for line in f:
             name = line.strip()
