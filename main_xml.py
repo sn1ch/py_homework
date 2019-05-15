@@ -39,7 +39,7 @@ words_list = []
 for description in items:
     for word in description.text.split():
         if len(word) > 6:
-            words_list.append(word)
+            words_list.append(word.lower())
 words_list.sort(key=sortByLength, reverse=True)
 
 number_words = count_repetitions(words_list)
