@@ -11,26 +11,13 @@ avtorizaciz = {
     'scope': 'friends, status',
     'response_type': 'token',
     'v': '5.95'
-    # 'redirect_uri': 'https://sad.com/'
 
 }
 
 pprint('?'.join((BASE_URL, urlencode(avtorizaciz))))
 
-TOKEN = 'bcc1fffe4f135e4040b798d55ffe2784ae559cda951b392de3d4e0134d4f7bbc656143693e8e8984c8edc'
-
-params = {
-    'access_token': TOKEN,
-    'v': '5.95'
-}
-
-resp = requests.get('https://api.vk.com/method/status.get', params)
-# pprint(resp)
-# pprint(resp.text)
-# pprint(resp.json())
-# pprint(params)
-# params['text'] = 'olool'
-# pprint(params)
+# TOKEN = 'bcc1fffe4f135e4040b798d55ffe2784ae559cda951b392de3d4e0134d4f7bbc656143693e8e8984c8edc'
+TOKEN = '668021e03117339448c445050489428ce095b2dcf8f0c01472ef7344c384d770dd51f34037afef29110cc'
 
 params1 = {
     'access_token': TOKEN,
@@ -38,7 +25,11 @@ params1 = {
     'order': 'hints',
     'fields': 'nickname'
 }
-resp2 = requests.get('https://api.vk.com/method/friends.get', params1)
+
+
+# resp2 = requests.get('https://api.vk.com/method/friends.get', params1)
+
+
 # pprint(resp2)
 # pprint(resp2.text)
 # pprint(resp2.json())
@@ -59,13 +50,42 @@ class User:
         }
         return params
 
+    def __and__(self, other):
+        params = self.get_params()
+        params['source_uid'] = self.user_id
+        params['target_uid'] = other.user_id
+        resp3 = requests.get('https://api.vk.com/method/friends.getMutual', params)
+        return resp3.json()
+
     def get_friendlist(self):
         params = self.get_params()
         response = requests.get('https://api.vk.com/method/friends.get', params)
         return response.json()
 
-serg = User(TOKEN)
-pprint(serg.get_friendlist())
+    def a(self):
+        params = self.get_params()
+        params['source_uid'] = '4417893'
+        params['target_uid'] = '37893810'
+        resp3 = requests.get('https://api.vk.com/method/friends.getMutual', params)
+        return resp3.json()
 
-# diana = User(TOKEN, user_id='37893810')
-# pprint(diana.get_friendlist())
+
+serg = User(TOKEN)
+# pprint(serg.get_friendlist())
+pprint(serg.a())
+url = 'https://vk.com/id'
+id = '37893810'
+diana = User(TOKEN, user_id='37893810')
+# pprint(serg & diana)
+
+a = serg & diana
+list = []
+for i in a.values():
+    for k in i:
+        list.append(User(TOKEN, user_id=k))
+print(list)
+print(list[1].get_friendlist())
+
+
+
+
