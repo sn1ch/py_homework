@@ -13,7 +13,6 @@ authorization = {
     'scope': 'friends, groups',
     'response_type': 'token',
     'v': '5.95'
-
 }
 
 pprint('?'.join((BASE_URL, urlencode(authorization))))
