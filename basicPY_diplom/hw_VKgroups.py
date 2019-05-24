@@ -57,7 +57,7 @@ class User:
 
     def get_friends_groups(self, group_id):
         params = self.get_params()
-        params['group_id'] = group_id  # 36775802
+        params['group_id'] = group_id 
         params['filter'] = 'friends'
         response = requests.get('https://api.vk.com/method/groups.getMembers', params)
         print('...')
@@ -84,18 +84,43 @@ class User:
         time.sleep(0.34)
         return response.json()
 
+    def get_friends(self):
+        params = self.get_params()
+        response = requests.get('https://api.vk.com/method/friends.get', params)
+        return response.json()
+
 
 def write_file(path, data):
     with open(path, 'w', encoding='utf8') as file:
-        json.dump(data, file)
+        json.dump(data, file, ensure_ascii=False, indent=4, separators=(',', ': '))
+
+
+def get_closed_and_banned_friends(friends, data):
+    for i in friends['response']['items']:
+        try:
+            if i['deactivated'] == 'deleted' or i['deactivated'] == 'banned':
+                data.setdefault('closed_friends', [])
+                data['closed_friends'].append(
+                    {'id': i['id'], 'first_name': i['first_name'], 'last_name': i['last_name'],
+                     'deactivated': i['deactivated']})
+
+        except KeyError:
+            if i['is_closed']:
+                data.setdefault('closed_friends', [])
+                data['closed_friends'].append(
+                    {'id': i['id'], 'first_name': i['first_name'], 'last_name': i['last_name'],
+                     'is_closed': i['is_closed']})
+    data.setdefault('count_closed_friends', len(data['closed_friends']))
+    return data
 
 
 if __name__ == '__main__':
-    # user = 'eshmargunov'  # тут сделать инпут 171691064 eshmargunov sn1ch 17820325
     user = input('Ввеите ID или коротий адрес страницы: ')
     user1 = User(TOKEN)
     user_id = user1.get_user_id(user)
     total_groups = user1.get_groups(user_id)
     no_friends_groups_list = user1.no_friends_groups_id(total_groups)
-    data = user1.no_friends_groups_result(no_friends_groups_list)
+    no_friends_group = user1.no_friends_groups_result(no_friends_groups_list)
+    friends = user1.get_friends()
+    data = get_closed_and_banned_friends(friends, no_friends_group)
     write_file('VKgroups.json', data)
