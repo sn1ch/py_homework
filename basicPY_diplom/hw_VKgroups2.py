@@ -17,7 +17,6 @@ authorization = {
 
 pprint('?'.join((BASE_URL, urlencode(authorization))))
 
-# TOKEN = 'c06bb1e0f991663abe4baf54d57b79cc7123a2406e396139dfebd1b05c2130ffbadb7b6ae7a82eedfa576'  # Я
 TOKEN = '73eaea320bdc0d3299faa475c196cfea1c4df9da4c6d291633f9fe8f83c08c4de2a3abf89fbc3ed8a44e1'  # ЖЕНЯ
 
 
@@ -116,8 +115,7 @@ def get_closed_and_banned_friends(friends):
 
 
 if __name__ == '__main__':
-    user = 'sn1ch'  # тут сделать инпут 171691064 eshmargunov sn1ch 17820325
-    # user = input('Введите ID или коротий адрес страницы: ')
+    user = input('Введите ID или коротий адрес страницы: ')
     user1 = User(TOKEN)
     user_id = user1.get_user_id(user)
     friends = user1.get_friends(user_id)
